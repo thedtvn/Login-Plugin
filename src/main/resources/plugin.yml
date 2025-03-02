@@ -1,0 +1,16 @@
+name: Login_Plugin
+version: '1.0-SNAPSHOT'
+main: com.thedtvn.login_Plugin.Login_Plugin
+api-version: '1.21'
+folia-supported: true
+
+commands:
+  reg:
+    description: Register
+    usage: /reg <password>
+    aliases: [register]
+
+  login:
+    description: Login
+    usage: /login <password>
+    aliases: [log]
