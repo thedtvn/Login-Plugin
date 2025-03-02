@@ -35,33 +35,34 @@ public class Player_Event implements Listener {
     }
 
     public static void teleportPlayer(Player player, Location location) {
-        final Scheduler.Task[] tasks = {null};
-        Runnable task = () -> {
+        final Runnable[] task = {null};
+        task[0] = () -> {
             try {
                 player.teleportAsync(location);
             } catch (RuntimeException e) {
                 try {
                     player.teleport(location);
                 } catch (RuntimeException ex) {
-                    return;
+                    Scheduler.runLater(task[0], 20);
                 }
             }
-            tasks[0].cancel();
         };
-        tasks[0] = Scheduler.runTimer(task, 0, 1);
+        Scheduler.run(task[0]);
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Server server = root_plugin.getServer();
         Player player = event.getPlayer();
-        setLoginStatus(player, false);
+
         player.setGameMode(GameMode.SPECTATOR);
         player.setFlying(true);
         World world = server.getWorld("world");
         assert world != null;
         Location spawn_location = world.getSpawnLocation();
         Player_Event.teleportPlayer(player, spawn_location);
+
+        setLoginStatus(player, false);
 
         YamlConfiguration config = root_plugin.getConfig("player_data.yml");
         String player_name = player.getName();
@@ -84,20 +85,12 @@ public class Player_Event implements Listener {
                 player.sendMessage("Hãy đăng nhập với /login <password>");
             }
         };
-        long delay = Scheduler.secToTick(5);
+        long delay = Scheduler.secToTick(10);
         login_task[0] = Scheduler.runTimer(task, 0, delay);
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        if (!getLoginStatus(player)) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         if (!getLoginStatus(player)) {
             event.setCancelled(true);

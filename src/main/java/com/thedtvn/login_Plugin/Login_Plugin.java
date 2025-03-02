@@ -61,6 +61,7 @@ public final class Login_Plugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        PluginManager pm = getServer().getPluginManager();
+        pm.disablePlugin(this);
     }
 }
