@@ -1,15 +1,14 @@
 package com.thedtvn.login_Plugin;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -75,26 +74,27 @@ public class Player_Event implements Listener {
                 return;
             } else if (System.currentTimeMillis() - join_time > 60 * 1000) {
                 login_task[0].cancel();
-                Component kick_message = Component.text("You are not logged in.");
+                Component kick_message = Component.text("Bạn đã bị kick bởi vì quá thời gian đăng nhập");
                 player.kick(kick_message);
                 return;
             }
             if (!is_registered) {
                 player.sendMessage("Bạn chưa đăng ký. Hãy đăng ký với /reg <password>");
+                Component bigtext = Component.text("Đăng ký với commands");
+                Component subtext = Component.text("/reg <password>");
+                Title text = Title.title(bigtext, subtext);
+                player.showTitle(text);
             } else {
+                Component bigtext = Component.text("Đăng nhâp với commands");
+                Component subtext = Component.text("/log <password>");
+                Title text = Title.title(bigtext, subtext);
+                player.showTitle(text);
                 player.sendMessage("Hãy đăng nhập với /login <password>");
             }
+            teleportPlayer(player, spawn_location);
         };
-        long delay = Scheduler.secToTick(10);
+        long delay = Scheduler.secToTick(3);
         login_task[0] = Scheduler.runTimer(task, 0, delay);
-    }
-
-    @EventHandler
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        if (!getLoginStatus(player)) {
-            event.setCancelled(true);
-        }
     }
 
     @EventHandler

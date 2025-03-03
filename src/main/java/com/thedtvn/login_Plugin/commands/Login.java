@@ -87,7 +87,7 @@ public class Login implements CommandExecutor {
         }
 
         player.sendMessage("Bạn đã đăng nhập thành công.");
-
+        player.clearTitle();
         return true;
     }
 

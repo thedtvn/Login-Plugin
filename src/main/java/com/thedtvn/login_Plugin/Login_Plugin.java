@@ -3,8 +3,9 @@ package com.thedtvn.login_Plugin;
 import com.thedtvn.login_Plugin.commands.Login;
 import com.thedtvn.login_Plugin.commands.Reg;
 import org.bukkit.NamespacedKey;
-import org.bukkit.WorldCreator;
+import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 import java.io.File;
@@ -29,6 +30,12 @@ public final class Login_Plugin extends JavaPlugin {
         getCommand("login").setExecutor(new Login(this));
         getCommand("reg").setExecutor(new Reg(this));
         pm.registerEvents(new Player_Event(this), this);
+        pm.registerEvents(new Entity_Event(this), this);
+        for (World world : getServer().getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                Entity_Event.setHealth(entity);
+            }
+        }
     }
 
     public File getConfigFileDir(String file_name) {
