@@ -30,12 +30,6 @@ public final class Login_Plugin extends JavaPlugin {
         getCommand("login").setExecutor(new Login(this));
         getCommand("reg").setExecutor(new Reg(this));
         pm.registerEvents(new Player_Event(this), this);
-        pm.registerEvents(new Entity_Event(this), this);
-        for (World world : getServer().getWorlds()) {
-            for (Entity entity : world.getEntities()) {
-                Entity_Event.setHealth(entity);
-            }
-        }
     }
 
     public File getConfigFileDir(String file_name) {

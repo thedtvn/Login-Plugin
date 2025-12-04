@@ -13,4 +13,4 @@ commands:
   login:
     description: Login
     usage: /login <password>
-    aliases: [log]
+    aliases: [l]
